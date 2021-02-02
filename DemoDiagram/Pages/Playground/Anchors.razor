@@ -1,0 +1,105 @@
+@page "/playground/anchors"
+
+<svg id="canvas" width="801" height="481" xmlns="http://www.w3.org/2000/svg" @onmousemove="OnMouseMove"
+    @onmouseup="OnMouseUp" @onmouseout="OnMouseOut">
+    <defs>
+        <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+            <path id="smallGridPath" d="M 8 0 H 0 V 8" fill="none" stroke="gray" stroke-width="0.5" />
+        </pattern>
+        <pattern id="largeGrid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <rect id="largeGridRect" width="80" height="80" fill="url(#smallGrid)" />
+            <!-- draw from upper right to upper left, then down to lower left -->
+            <!-- This creates the appearance of an 80x80 grid when stacked -->
+            <path id="largeGridPath" d="M 80 0 H 0 V 80" fill="none" stroke="gray" stroke-width="2" />
+        </pattern>
+
+        <marker id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8start" refX="1" refY="5" markerUnits="userSpaceOnUse"
+            markerWidth="17" markerHeight="11" orient="auto">
+            <!-- <path id="conditional"   d="M 0 6 L 8 1 L 15 5 L 8 9 L 1 5" fill="white" stroke="black" stroke-width="1" /> -->
+            <path id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8default" d="M 5 0 L 11 10" fill="white" stroke="#585858"
+                stroke-width="1" display="none"></path>
+        </marker>
+        <marker id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8end" refX="15" refY="6" markerUnits="userSpaceOnUse"
+            markerWidth="15" markerHeight="12" orient="auto">
+            <path id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8arrowhead" d="M 0 1 L 15 6 L 0 11z" fill="#585858"
+                stroke="#585858" stroke-linejoin="round" stroke-width="2"></path>
+        </marker>
+    </defs>
+
+    <!-- a trick from my old Commodore 64 days is to extend the scrolling region beyond the viewport 
+  and use mod 80 to reset the position to simulate a virtual space. -->
+    <g id="surface" x="-80" y="-80" width="961" height="641">
+        <rect id="grid" x="-80" y="-80" width="961" height="641" fill="url(#largeGrid)" />
+    </g>
+
+    <g id="stencils">
+        <g class="me"></g>
+        <g class="children">
+                <g pointer-events="all" transform="@magnetTranslation.ToTranslate()">
+                    <circle cx="@magnetPosition.X" cy="@magnetPosition.Y" r="4" stroke="none" fill="red" fill-opacity="0.3"></circle>
+                </g>
+
+            </g>
+
+        <g class="edge">
+            <g id="svg-sid-644297D7-D7E7-4736-8B08-9D09FF7CA36B">
+                <g class="stencils" @onmouseover="OnMouseOver">
+                    <g class="me">
+                        <g pointer-events="painted">
+                            <path id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8_1"
+                                d="@line.Drawn() "
+                                stroke="#585858" fill="none" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                marker-start="url(#sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8start)"
+                                marker-end="url(#sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8end)"></path>
+                            <path id="undefined"
+                                d="@line.Drawn() "
+                                stroke="black" fill="none" stroke-width="10" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                marker-start="url(#sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8start)"
+                                marker-end="url(#sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8end)" visibility="hidden"
+                                stroke-dasharray="null" title="BPMN.STENCILS.SEQUENCEFLOW.TITLE"></path>
+                        </g>
+                        <text id="sid-2F05C12A-F392-4FBD-8D13-F5DCC6D4F6F8text_name" x="120" y="142"
+                            oryx:edgePosition="startTop" stroke-width="0pt" letter-spacing="0px"
+                            transform="rotate(335.6136288981986 112 150)" oryx:fontSize="12" text-anchor="start"></text>
+                    </g>
+                    <g class="children" style="overflow:hidden"></g>
+                    <g class="edge"></g>
+                </g>
+                <g class="controls">
+                    <g class="dockers">
+                        <g visibility="hidden">
+                            <g pointer-events="all" transform="translate(104.80140689983956, 142.74336220540607)">
+                                <circle cx="8" cy="8" r="8" stroke="none" fill="none"></circle>
+                                <circle cx="8" cy="8" r="3" stroke="black" fill="#00FF00" stroke-width="1"></circle>
+                            </g>
+                            <g pointer-events="none" visibility="hidden" transform="translate(99, 157)">
+                                <circle cx="0" cy="0" r="3" fill="red" fill-opacity="0.4"></circle>
+                            </g>
+                        </g>
+                        <g visibility="hidden">
+                            <g pointer-events="all" transform="translate(166, 115)">
+                                <circle cx="8" cy="8" r="8" stroke="none" fill="none"></circle>
+                                <circle cx="8" cy="8" r="3" stroke="black" fill="#FF0000" stroke-width="1"></circle>
+                            </g>
+                            <g pointer-events="none" visibility="hidden" transform="translate(174, 123)">
+                                <circle cx="0" cy="0" r="3" fill="red" fill-opacity="0.4"></circle>
+                            </g>
+                        </g>
+                        <g >
+                            <g @onmousedown="OnMouseDown" pointer-events="all" transform="@docker_green_translation.ToTranslate()">
+                                <circle cx="@dockerPosition.X" cy="@dockerPosition.Y" r="8" stroke="none" fill="none"></circle>
+                                <circle cx="@dockerPosition.X" cy="@dockerPosition.Y" r="3" stroke="black" fill="#00FF00" stroke-width="1"></circle>
+                            </g>
+                            <g pointer-events="none" transform="@docker_red_translation.ToTranslate()">
+                                <circle cx="0" cy="0" r="3" fill="red" fill-opacity="0.4"></circle>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="magnets"></g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

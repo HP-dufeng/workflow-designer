@@ -1,0 +1,10 @@
+@using AutomationDesigner.Store.StencilSetsUserCase.Models
+
+@foreach (var group in StencilItemGroups)
+{
+    <TreeNode StencilItemGroup=group/>   
+}
+
+@code {
+    [Parameter] public List<StencilItemGroup> StencilItemGroups {get;set;}
+}

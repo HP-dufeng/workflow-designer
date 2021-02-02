@@ -1,0 +1,78 @@
+@page "/playground"
+@using DemoDiagram.Store
+
+<svg id="canvas" width="801" height="481" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+            <path id="smallGridPath" d="M 8 0 H 0 V 8" fill="none" stroke="gray" stroke-width="0.5" />
+        </pattern>
+        <pattern id="largeGrid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <rect id="largeGridRect" width="80" height="80" fill="url(#smallGrid)" />
+            <!-- draw from upper right to upper left, then down to lower left -->
+            <!-- This creates the appearance of an 80x80 grid when stacked -->
+            <path id="largeGridPath" d="M 80 0 H 0 V 80" fill="none" stroke="gray" stroke-width="2" />
+        </pattern>
+    </defs>
+
+    <!-- a trick from my old Commodore 64 days is to extend the scrolling region beyond the viewport 
+  and use mod 80 to reset the position to simulate a virtual space. -->
+    <g id="surface" x="-80" y="-80" width="961" height="641">
+        <rect id="grid" x="-80" y="-80" width="961" height="641" fill="url(#largeGrid)" />
+    </g>
+
+    <g id="stencils">
+        
+        <circle transform="@Transform" cx="150" cy="100" r="40" stroke="black" stroke-width="1" fill="#FFC0C0" 
+        @onmousedown="OnMouseDown" @onmousemove="OnMouseMove" @onmouseup="OnMouseUp" @onmouseout="OnMouseOut"/>
+        @* <circle cx="175" cy="125" r="40" stroke="black" stroke-width="1" fill="#C0FFC0" /> *@
+    </g>
+</svg>
+
+@code {
+    public string Transform {get;set;}
+
+    bool mouseDown = false;
+        const double LEFT_MOUSE_BUTTON = 0;
+
+        Coordinate translation = new Coordinate(0,0);
+
+        Coordinate dragFrom;
+        Coordinate dragTo;
+
+        private void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == LEFT_MOUSE_BUTTON)
+            {
+                mouseDown = true;
+
+                dragFrom = new Coordinate(e.ClientX, e.ClientY);
+            }
+        }
+        private void OnMouseMove(MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                 dragTo = new Coordinate(e.ClientX, e.ClientY);
+
+                var offset = dragTo - dragFrom;
+
+                translation += offset;
+
+                Transform = $"translate({translation.X},{translation.Y})";
+                dragFrom = dragTo;
+            }
+        }
+
+        private void OnMouseUp(MouseEventArgs e)
+        {
+            if (e.Button == LEFT_MOUSE_BUTTON)
+            {
+                mouseDown = false;
+            }
+        }
+
+        private void OnMouseOut(MouseEventArgs e)
+        {
+            mouseDown = false;
+        }
+}

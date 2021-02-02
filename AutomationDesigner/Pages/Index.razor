@@ -1,0 +1,35 @@
+﻿@page "/"
+@using AutomationDesigner.Shared.Tree
+@using AutomationDesigner.Store.StencilSetsUserCase
+@using AutomationDesigner.Store.LocalizerUserCase
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@inject IState<StencilSetsState> state
+@inject IDispatcher dispatcher
+
+
+<div class="sidebar">
+    <TreeView StencilItemGroups=state.Value.StencilItemGroups />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        
+    </div>
+
+    <div class="content px-4">
+        
+    </div>
+</div>
+
+@code {
+     protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        dispatcher.Dispatch(new FetchLocalizerAction());
+        dispatcher.Dispatch(new FetchStencilSetsAction());
+    }
+
+
+}

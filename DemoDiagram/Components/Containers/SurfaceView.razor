@@ -1,0 +1,8 @@
+@inherits SVGDragableComponentBase
+
+<!-- a trick from my old Commodore 64 days is to extend the scrolling region beyond the viewport 
+  and use mod 80 to reset the position to simulate a virtual space. -->
+<g id="surface" transform="@Transform" x="-80" y="-80" width="961" height="641" @onmousedown="OnMouseDown"
+    @onmousemove="OnMouseMove" @onmouseup="OnMouseUp" @onmouseout="OnMouseOut">
+    <rect id="grid" x="-80" y="-80" width="961" height="641" fill="url(#largeGrid)" />
+</g>

@@ -1,0 +1,47 @@
+﻿@page "/"
+@using DemoDiagram.Components.StencilSets
+@using DemoDiagram.Store
+@using DemoDiagram.Store.Actions
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IState<FlowChartState> FlowChartState
+@inject IDispatcher dispatcher
+
+@{
+    var surface = FlowChartState.Value.Container.Surface;
+    var stencils = FlowChartState.Value.Container.StencilsContainer;
+    var toolbox = FlowChartState.Value.Container.Toolbox;
+}
+
+<Flowchart>
+    <SurfaceView Transform="@surface.Transform" OnDrag="ScrollSurface" />
+
+    @* <StencilsView Transform="@stencils.Transform" Stencils="@stencils.Stencils" TItem="Stencil">
+        <RepeaterStencil Context="stencil">
+            <Circle Id="@stencil.Id" Transform="@stencil.Transform" OnDrag="OnStencilDrag"
+                Position="@stencil.Position" />
+        </RepeaterStencil>
+    </StencilsView> *@
+
+    <StencilsView Transform="@stencils.Transform" Stencils="@stencils.Stencils" OnStencilDrag="OnStencilDrag"></StencilsView>
+
+
+    @* <ToolboxView Stencils="@toolbox.Tools" TItem="Stencil">
+        <RepeaterStencil Context="stencil">
+            <Circle Id="@stencil.Id" OnDrag="OnStencilDrag"
+                Position="@stencil.Position" />
+        </RepeaterStencil>
+    </ToolboxView> *@
+</Flowchart>
+
+@code {
+    public void ScrollSurface(SVGObjectDragEventArgs args)
+    {
+        dispatcher.Dispatch(new ScrollSurfaceAction(args.Offset));
+    }
+
+    public void OnStencilDrag(SVGObjectDragEventArgs args)
+    {
+        dispatcher.Dispatch(new StencilDragAction(args));
+    }
+}

@@ -1,0 +1,39 @@
+@using DemoDiagram.Store.Actions
+
+<g id="stencilsContainer" transform="@Transform">
+    @DynamicRender
+</g>
+
+@code {
+    [Parameter]
+    public string Transform { get; set; }
+
+    [Parameter]
+    public List<Stencil> Stencils { get; set; }
+
+    [Parameter]
+    public EventCallback<SVGObjectDragEventArgs> OnStencilDrag{get;set;}
+
+    private RenderFragment DynamicRender { get; set; }
+
+    private RenderFragment CreateComponent() => builder =>
+    {
+        foreach (var item in Stencils)
+        {
+
+            builder.OpenComponent(0, item.ComponentType);
+            builder.AddAttribute(1, "Id", item.Id);
+            builder.AddAttribute(2, "Transform", item.Transform);
+            builder.AddAttribute(3, "Position", item.Position);
+            builder.AddAttribute(4, "OnDrag", OnStencilDrag);
+            builder.CloseComponent();
+        }
+    };
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        DynamicRender = CreateComponent();
+    }
+
+}
